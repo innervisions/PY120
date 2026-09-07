@@ -17,6 +17,22 @@ class Computer(Player):
 
 
 class Human(Player):
+    @staticmethod
+    def process_choice(player_choice):
+        player_choice = player_choice.lower()
+        if player_choice.startswith("r"):
+            return "rock"
+        if player_choice.startswith("p"):
+            return "paper"
+        if player_choice.startswith("sc"):
+            return "scissors"
+        if player_choice.startswith("l"):
+            return "lizard"
+        if player_choice.startswith("sp"):
+            return "spock"
+        
+        return ""
+    
     def __init__(self):
         super().__init__()
 
@@ -24,7 +40,8 @@ class Human(Player):
         prompt = "Please choose rock, paper, or scissors: "
 
         while True:
-            choice = input(prompt).lower()
+            choice = input(prompt)
+            choice = Human.process_choice(choice)
             if choice.lower() in Player.CHOICES:
                 break
 
