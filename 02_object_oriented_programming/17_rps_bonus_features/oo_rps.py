@@ -1,7 +1,45 @@
 import random
 
+class Move:
+    def __eq__(self, other):
+        type(self) == type(other)
+
+class Rock(Move):
+    def __str__(self):
+        return "rock"
+    
+    def __gt__(self, other):
+        return isinstance(other, Scissors) or isinstance(other, Lizard)
+
+class Paper(Move):
+    def __str__(self):
+            return "paper"
+    
+    def __gt__(self, other):
+            return isinstance(other, Rock) or isinstance(other, Spock)
+
+class Scissors(Move):
+    def __str__(self):
+            return "scissors"
+        
+    def __gt__(self, other):
+            return isinstance(other, Paper) or isinstance(other, Lizard)
+
+class Lizard(Move):
+    def __str__(self):
+            return "lizard"
+        
+    def __gt__(self, other):
+            return isinstance(other, Paper) or isinstance(other, Spock)
+
+class Spock(Move):
+    def __str__(self):
+            return "spock"
+    def __gt__(self, other):
+            return isinstance(other, Rock) or isinstance(other, Scissors)
+
 class Player:
-    CHOICES = ("rock", "paper", "scissors")
+    CHOICES = {"rock": Rock, "paper": Paper, "scissors": Scissors, "lizard": Lizard, "spock": Spock}
 
     def __init__(self):
         self.move = None
@@ -13,7 +51,8 @@ class Computer(Player):
         super().__init__()
 
     def choose(self):
-        self.move = random.choice(Player.CHOICES)
+        choices = list(Player.CHOICES.values())
+        self.move = random.choice(choices)()
 
 
 class Human(Player):
@@ -33,21 +72,26 @@ class Human(Player):
         
         return ""
     
+    @staticmethod
+    def join_or(words):
+        return ", ".join(words[:-1]) + ", or " + words[-1]
+    
     def __init__(self):
         super().__init__()
 
     def choose(self):
-        prompt = "Please choose rock, paper, or scissors: "
+        choices = list(Player.CHOICES.keys())
+        prompt = f"Please choose {Human.join_or(choices)}: "
 
         while True:
-            choice = input(prompt)
+            choice = input(prompt).lower()
             choice = Human.process_choice(choice)
-            if choice.lower() in Player.CHOICES:
+            if choice in Player.CHOICES:
                 break
 
-            print(f"Sorry, {choice} is not valid")
+            print(f"Sorry, that is not a valid choice.")
 
-        self.move = choice
+        self.move = Player.CHOICES[choice]()
 
 
 class RPSGame:
@@ -74,20 +118,10 @@ class RPSGame:
         print("-" * 55)
 
     def _human_wins(self):
-        human_move = self._human.move
-        computer_move = self._computer.move
-
-        return ((human_move == 'rock' and computer_move == 'scissors') or
-                (human_move == 'paper' and computer_move == 'rock') or
-                (human_move == 'scissors' and computer_move == 'paper'))
+        return self._human.move > self._computer.move
 
     def _computer_wins(self):
-        human_move = self._human.move
-        computer_move = self._computer.move
-
-        return ((computer_move == 'rock' and human_move == 'scissors') or
-                (computer_move == 'paper' and human_move == 'rock') or
-                (computer_move == 'scissors' and human_move == 'paper'))
+        self._computer.move > self._human.move
 
     def _determine_round_winner(self):
         print(f'You chose: {self._human.move}')
