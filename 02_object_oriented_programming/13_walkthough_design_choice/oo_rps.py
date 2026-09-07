@@ -5,8 +5,6 @@ class Player:
 
     def __init__(self):
         self.move = None
-        self.score = 0
-
 
 class Computer(Player):
     def __init__(self):
