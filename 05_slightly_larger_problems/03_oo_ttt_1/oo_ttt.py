@@ -1,23 +1,23 @@
 class Square:
-    def __init__(self):
-        # STUB
-        # We need some way to keep track of this square's
-        #   marker.
-        pass
+    def __init__(self, marker):
+        self.marker = marker
+        
+    def __str__(self):
+        return self.marker
 
 
 class Board:
     def __init__(self):
         self.squares = {
-            1: "X",
-            2: " ",
-            3: " ",
-            4: " ",
-            5: "O",
-            6: " ",
-            7: " ",
-            8: " ",
-            9: " ",
+            1: Square(" "),
+            2: Square(" "),
+            3: Square("X"),
+            4: Square(" "),
+            5: Square("O"),
+            6: Square(" "),
+            7: Square("X"),
+            8: Square(" "),
+            9: Square(" "),
         }
 
     def display(self):
