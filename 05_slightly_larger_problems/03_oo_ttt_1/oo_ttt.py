@@ -93,14 +93,10 @@ class TTTGame:
         self.display_goodbye_message()
 
     def display_welcome_message(self):
-        # STUB
-        # Show a welcome message.
-        pass
+        print("Welcome to Tic Tac Toe!")
 
     def display_goodbye_message(self):
-        # STUB
-        # Show a goodbye message.
-        pass
+        print("Thanks for playing Tic Tac Toe! Goodbye!")
 
     def display_results(self):
         # STUB
@@ -125,7 +121,7 @@ class TTTGame:
     def is_game_over(self):
         # STUB
         # We'll start by assuming the game never ends.
-        return False
+        return True
 
 
 game = TTTGame()
