@@ -1,24 +1,18 @@
 class Square:
-    def __init__(self, marker):
+    INITIAL_MARKER = " "
+    HUMAN_MARKER = "X"
+    COMPUTER_MARKER = "O"
+
+    def __init__(self, marker=INITIAL_MARKER):
         self.marker = marker
-        
+
     def __str__(self):
         return self.marker
 
 
 class Board:
     def __init__(self):
-        self.squares = {
-            1: Square(" "),
-            2: Square(" "),
-            3: Square("X"),
-            4: Square(" "),
-            5: Square("O"),
-            6: Square(" "),
-            7: Square("X"),
-            8: Square(" "),
-            9: Square(" "),
-        }
+        self.squares = { idx: Square() for idx in range(1, 10) }
 
     def display(self):
         print()
