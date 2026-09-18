@@ -7,15 +7,20 @@ class Square:
 
 
 class Board:
-    def __init__(self):
-        # STUB
-        # We need a way to model the 3x3 grid. Perhaps
-        #   "squares"?
-        # What data structure should we use? A list? A
-        #   dictionary? Something else?
-        # What should the data structure store? Strings?
-        #   Numbers? Square objects?
-        pass
+    def display(self):
+        print()
+        print("     |     |")
+        print("  O  |     |  O")
+        print("     |     |")
+        print("-----+-----+-----")
+        print("     |     |")
+        print("     |  X  |")
+        print("     |     |")
+        print("-----+-----+-----")
+        print("     |     |")
+        print("  X  |     |")
+        print("     |     |")
+        print()
 
 
 class Row:
@@ -73,6 +78,9 @@ class Computer(Player):
 
 
 class TTTGame:
+    def __init__(self):
+        self.board = Board()
+    
     def play(self):
         # SPIKE
         self.display_welcome_message()
@@ -101,11 +109,6 @@ class TTTGame:
     def display_results(self):
         # STUB
         # Show the results of this game (win, lose, tie).
-        pass
-
-    def display_board(self):
-        # STUB
-        # Display the board, including its current state.
         pass
 
     def first_player_moves(self):
