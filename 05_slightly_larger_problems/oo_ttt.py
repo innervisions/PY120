@@ -1,9 +1,10 @@
 import random
 import os
-import subprocess
+
 
 def clear_screen():
-    subprocess.run(["cls" if os.name == "nt" else "clear"], shell=True)
+    os.system("clear")
+
 
 class Square:
     INITIAL_MARKER = " "
@@ -30,13 +31,14 @@ class Square:
 
 class Board:
     def __init__(self):
-        self.squares = { idx: Square() for idx in range(1, 10) }
+        self.squares = {idx: Square() for idx in range(1, 10)}
 
     def mark_square_at(self, key, marker):
         self.squares[key].marker = marker
 
     def unused_squares(self):
-        return [key for key, square in self.squares.items() if square.is_unused()]
+        return [key for key, square in self.squares.items()
+                if square.is_unused()]
 
     def is_full(self):
         return len(self.unused_squares()) == 0
@@ -49,27 +51,34 @@ class Board:
         print()
         print("     |     |")
         print(
-            f"  {self.squares[1]}  |" f"  {self.squares[2]}  |" f"  {self.squares[3]}"
+            f"  {self.squares[1]}  |"
+            f"  {self.squares[2]}  |"
+            f"  {self.squares[3]}"
         )
         print("     |     |")
         print("-----+-----+-----")
         print("     |     |")
         print(
-            f"  {self.squares[4]}  |" f"  {self.squares[5]}  |" f"  {self.squares[6]}"
+            f"  {self.squares[4]}  |"
+            f"  {self.squares[5]}  |"
+            f"  {self.squares[6]}"
         )
         print("     |     |")
         print("-----+-----+-----")
         print("     |     |")
         print(
-            f"  {self.squares[7]}  |" f"  {self.squares[8]}  |" f"  {self.squares[9]}"
+            f"  {self.squares[7]}  |"
+            f"  {self.squares[8]}  |"
+            f"  {self.squares[9]}"
         )
         print("     |     |")
         print()
-        
+
     def display_with_clear(self):
         clear_screen()
         print("\n")
         self.display()
+
 
 class Player:
 
@@ -116,7 +125,7 @@ class TTTGame:
         # SPIKE
         self.display_welcome_message()
         self.board.display()
-        
+
         while True:
             self.human_moves()
             if self.is_game_over():
@@ -125,7 +134,7 @@ class TTTGame:
             self.computer_moves()
             if self.is_game_over():
                 break
-            
+
             self.board.display_with_clear()
 
         self.board.display_with_clear()
