@@ -115,6 +115,18 @@ class TTTGame:
         (1, 5, 9),  # diagonal: top-left to bottom-right
         (3, 5, 7),  # diagonal: top-right to bottom-left
     )
+    
+    @staticmethod
+    def join_or(lst, delimiter=', ', conjunction='or'):
+        match len(lst):
+            case 0:
+                return ""
+            case 1:
+                return lst[0]
+            case 2:
+                return f'{lst[0]} {conjunction} {lst[1]}'
+        beginning = delimiter.join(str(el) for el in lst[0:-1])
+        return f'{beginning}{delimiter}{conjunction} {lst[-1]}'
 
     def __init__(self):
         self.board = Board()
@@ -167,7 +179,7 @@ class TTTGame:
 
         while True:
             choices_list = [str(choice) for choice in valid_choices]
-            choices_str = ", ".join(choices_list)
+            choices_str = TTTGame.join_or(choices_list, ", ", "or")
             prompt = f"Choose a square ({choices_str}): "
             choice = input(prompt)
             try:
