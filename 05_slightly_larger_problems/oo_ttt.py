@@ -10,7 +10,7 @@ class Square:
 
     def __str__(self):
         return self.marker
-    
+
     @property
     def marker(self):
         return self._marker
@@ -19,6 +19,9 @@ class Square:
     def marker(self, marker):
         self._marker = marker
 
+    def is_unused(self):
+        return self.marker == Square.INITIAL_MARKER
+
 
 class Board:
     def __init__(self):
@@ -26,6 +29,9 @@ class Board:
 
     def mark_square_at(self, key, marker):
         self.squares[key].marker = marker
+
+    def unused_squares(self):
+        return [key for key, square in self.squares.items() if square.is_unused()]
 
     def display(self):
         print()
@@ -128,12 +134,16 @@ class TTTGame:
         pass
 
     def human_moves(self):
-        choice = None
+        valid_choices = self.board.unused_squares()
+
         while True:
-            choice = input("Choose a square between 1 and 9: ")
+            choices_list = [str(choice) for choice in valid_choices]
+            choices_str = ", ".join(choices_list)
+            prompt = f"Choose a square ({choices_str}): "
+            choice = input(prompt)
             try:
                 choice = int(choice)
-                if 1 <= choice <= 9:
+                if choice in valid_choices:
                     break
             except ValueError:
                 pass
@@ -144,11 +154,12 @@ class TTTGame:
         self.board.mark_square_at(choice, self.human.marker)
 
     def computer_moves(self):
-        choice = random.randint(1, 9)
+        valid_choices = self.board.unused_squares()
+        choice = random.choice(valid_choices)
         self.board.mark_square_at(choice, self.computer.marker)
 
     def is_game_over(self):
-        pass
+        return False
 
 
 game = TTTGame()
