@@ -61,23 +61,6 @@ class Board:
         print("     |     |")
         print()
 
-
-class Row:
-    def __init__(self):
-        # STUB
-        # We need some way to identify a row of 3 squares
-        pass
-
-
-class Marker:
-    def __init__(self):
-        # STUB
-        # A marker is something that represents a board
-        #   square that belongs to a particular player. That
-        #   is, it's a square that was chosen by the player.
-        pass
-
-
 class Player:
 
     def __init__(self, marker):
@@ -193,13 +176,7 @@ class TTTGame:
         return self.board.count_markers_for(player, row) == 3
 
     def someone_won(self):
-        for row in TTTGame.POSSIBLE_WINNING_ROWS:
-            if self.three_in_a_row(self.human, row):
-                return True
-            elif self.three_in_a_row(self.computer, row):
-                return True
-
-        return False
+        return self.is_winner(self.human) or self.is_winner(self.computer)
 
 
 game = TTTGame()
