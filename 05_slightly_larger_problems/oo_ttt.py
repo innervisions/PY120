@@ -1,4 +1,9 @@
 import random
+import os
+import subprocess
+
+def clear_screen():
+    subprocess.run(["cls" if os.name == "nt" else "clear"], shell=True)
 
 class Square:
     INITIAL_MARKER = " "
@@ -60,6 +65,11 @@ class Board:
         )
         print("     |     |")
         print()
+        
+    def display_with_clear(self):
+        clear_screen()
+        print("\n")
+        self.display()
 
 class Player:
 
@@ -105,21 +115,20 @@ class TTTGame:
     def play(self):
         # SPIKE
         self.display_welcome_message()
-
+        self.board.display()
+        
         while True:
-            self.board.display()
-
             self.human_moves()
-            self.board.display()
             if self.is_game_over():
                 break
 
             self.computer_moves()
-            self.board.display()
             if self.is_game_over():
                 break
+            
+            self.board.display_with_clear()
 
-        self.board.display()
+        self.board.display_with_clear()
         self.display_results()
         self.display_goodbye_message()
 
