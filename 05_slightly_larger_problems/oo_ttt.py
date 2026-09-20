@@ -1,3 +1,5 @@
+import random
+
 class Square:
     INITIAL_MARKER = " "
     HUMAN_MARKER = "X"
@@ -8,11 +10,22 @@ class Square:
 
     def __str__(self):
         return self.marker
+    
+    @property
+    def marker(self):
+        return self._marker
+
+    @marker.setter
+    def marker(self, marker):
+        self._marker = marker
 
 
 class Board:
     def __init__(self):
         self.squares = { idx: Square() for idx in range(1, 10) }
+
+    def mark_square_at(self, key, marker):
+        self.squares[key].marker = marker
 
     def display(self):
         print()
@@ -53,47 +66,35 @@ class Marker:
 
 
 class Player:
-    def __init__(self):
-        # STUB
-        # A player is either a human or a computer that is
-        #   playing the game.
-        # Perhaps we need a "marker" to keep track of this
-        #   player's symbol? (i.e., 'X' or 'O')
-        pass
 
-    def mark(self):
-        # STUB
-        # We need a way to mark the board with this player's
-        #   marker. How do we access the board?
-        pass
+    def __init__(self, marker):
+        self.marker = marker
 
-    def play(self):
-        # STUB
-        # We need a way for each player to play the game.
-        # Do we need access to the board?
-        pass
+    @property
+    def marker(self):
+        return self._marker
+
+    @marker.setter
+    def marker(self, value):
+        self._marker = value
 
 
 class Human(Player):
     def __init__(self):
-        # STUB
-        # What does a human player need to do? How does it
-        #   differ from the basic Player or a Computer?
-        pass
+        super().__init__(Square.HUMAN_MARKER)
 
 
 class Computer(Player):
     def __init__(self):
-        # STUB
-        # What does a computer player need to do? How does
-        #   it differ from the basic Player or a Human?
-        pass
+        super().__init__(Square.COMPUTER_MARKER)
 
 
 class TTTGame:
     def __init__(self):
         self.board = Board()
-    
+        self.human = Human()
+        self.computer = Computer()
+
     def play(self):
         # SPIKE
         self.display_welcome_message()
@@ -101,11 +102,13 @@ class TTTGame:
         while True:
             self.board.display()
 
-            self.first_player_moves()
+            self.human_moves()
+            self.board.display()
             if self.is_game_over():
                 break
 
-            self.second_player_moves()
+            self.computer_moves()
+            self.board.display()
             if self.is_game_over():
                 break
 
@@ -124,20 +127,28 @@ class TTTGame:
         # Show the results of this game (win, lose, tie).
         pass
 
-    def first_player_moves(self):
-        # STUB
-        # The first player makes a move.
-        pass
+    def human_moves(self):
+        choice = None
+        while True:
+            choice = input("Choose a square between 1 and 9: ")
+            try:
+                choice = int(choice)
+                if 1 <= choice <= 9:
+                    break
+            except ValueError:
+                pass
 
-    def second_player_moves(self):
-        # STUB
-        # The second player makes a move.
-        pass
+            print("Sorry, that's not a valid choice.")
+            print()
+
+        self.board.mark_square_at(choice, self.human.marker)
+
+    def computer_moves(self):
+        choice = random.randint(1, 9)
+        self.board.mark_square_at(choice, self.computer.marker)
 
     def is_game_over(self):
-        # STUB
-        # We'll start by assuming the game never ends.
-        return True
+        pass
 
 
 game = TTTGame()
