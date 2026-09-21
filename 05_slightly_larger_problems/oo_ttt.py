@@ -31,6 +31,9 @@ class Square:
 
 class Board:
     def __init__(self):
+        self.reset()
+
+    def reset(self):
         self.squares = {idx: Square() for idx in range(1, 10)}
 
     def mark_square_at(self, key, marker):
@@ -115,7 +118,7 @@ class TTTGame:
         (1, 5, 9),  # diagonal: top-left to bottom-right
         (3, 5, 7),  # diagonal: top-right to bottom-left
     )
-    
+
     @staticmethod
     def join_or(lst, delimiter=', ', conjunction='or'):
         match len(lst):
@@ -134,10 +137,27 @@ class TTTGame:
         self.computer = Computer()
 
     def play(self):
-        # SPIKE
         self.display_welcome_message()
         self.board.display()
 
+        while True:
+            self.play_round()
+            while True:
+                again = input("Would you like to play again? (y/n): ").lower()
+                if again not in ('y', 'n'):
+                    print("Please choose y or n.")
+                    continue
+                break
+            
+            if again =='y':
+                self.board.reset()
+                self.board.display_with_clear()
+            else:
+                break
+            
+        self.display_goodbye_message()
+
+    def play_round(self):
         while True:
             self.human_moves()
             if self.is_game_over():
@@ -151,7 +171,6 @@ class TTTGame:
 
         self.board.display_with_clear()
         self.display_results()
-        self.display_goodbye_message()
 
     def display_welcome_message(self):
         print("Welcome to Tic Tac Toe!")
