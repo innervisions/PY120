@@ -230,7 +230,7 @@ class TTTGame:
         
     def defensive_computer_move(self):
         for row in TTTGame.POSSIBLE_WINNING_ROWS:
-            key = self.at_risk_square(row)
+            key = self.at_risk_square(row, self.human)
             if key:
                 return key
 
@@ -238,7 +238,7 @@ class TTTGame:
     
     def offensive_computer_move(self):
         for row in TTTGame.POSSIBLE_WINNING_ROWS:
-            key = self.winning_square(row)
+            key = self.at_risk_square(row, self.computer)
             if key:
                 return key
 
@@ -251,22 +251,14 @@ class TTTGame:
         valid_choices = self.board.unused_squares()
         return random.choice(valid_choices)
 
-    def at_risk_square(self, row):
-        if self.board.count_markers_for(self.human, row) == 2:
+    def at_risk_square(self, row, player):
+        if self.board.count_markers_for(player, row) == 2:
             for key in row:
                 if self.board.squares[key].is_unused():
                     return key
 
         return None
     
-    def winning_square(self, row):
-        if self.board.count_markers_for(self.computer, row) == 2:
-            for key in row:
-                if self.board.squares[key].is_unused():
-                    return key
-
-        return None
-
     def is_game_over(self):
         return self.board.is_full() or self.someone_won()
 
