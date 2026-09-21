@@ -154,12 +154,14 @@ class TTTGame:
         self.display_goodbye_message()
 
     def play_match(self):
+        first_player = random.choice([self.human, self.computer])
         while not self.match_winner():
-            self.play_round()
+            self.play_round(first_player)
             if self.match_winner():
                 break
             if self.play_again():
                 self.board.reset()
+                first_player = self.swap_players(first_player)
                 self.display_scores()
                 self.board.display()
             else:
@@ -179,13 +181,17 @@ class TTTGame:
         print(f"Computer won {self.computer.score}.")
         print(f"{self.match_winner()} wins the match.")
 
-    def play_round(self):
+    def play_round(self, first_player):
+        second_player = self.swap_players(first_player)
         while True:
-            self.human_moves()
+            self.player_moves(first_player)
             if self.is_game_over():
                 break
+            
+            self.display_scores()
+            self.board.display()
 
-            self.computer_moves()
+            self.player_moves(second_player)
             if self.is_game_over():
                 break
             self.display_scores()
@@ -204,6 +210,15 @@ class TTTGame:
             break
 
         return again == 'y'
+    
+    def swap_players(self, player):
+        return self.human if player == self.computer else self.computer
+    
+    def player_moves(self, player):
+        if player == self.human:
+            self.human_moves()
+        else:
+            self.computer_moves()
 
     def display_welcome_message(self):
         print("Welcome to Tic Tac Toe!")
