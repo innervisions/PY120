@@ -222,6 +222,9 @@ class TTTGame:
         if not choice:
             choice = self.defensive_computer_move()
         if not choice:
+            if self.board.squares[5].is_unused():
+                choice = 5
+        if not choice:
             valid_choices = self.board.unused_squares()
             choice = random.choice(valid_choices)
             
