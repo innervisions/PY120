@@ -222,11 +222,9 @@ class TTTGame:
         if not choice:
             choice = self.defensive_computer_move()
         if not choice:
-            if self.board.squares[5].is_unused():
-                choice = 5
+            choice = self.pick_center_square()
         if not choice:
-            valid_choices = self.board.unused_squares()
-            choice = random.choice(valid_choices)
+            choice = self.pick_random_square()
             
         self.board.mark_square_at(choice, self.computer.marker)
         
@@ -246,6 +244,12 @@ class TTTGame:
 
         return None
     
+    def pick_center_square(self):
+        return 5 if self.board.squares[5].is_unused() else None
+    
+    def pick_random_square(self):
+        valid_choices = self.board.unused_squares()
+        return random.choice(valid_choices)
 
     def at_risk_square(self, row):
         if self.board.count_markers_for(self.human, row) == 2:
