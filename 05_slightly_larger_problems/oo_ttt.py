@@ -87,6 +87,7 @@ class Player:
 
     def __init__(self, marker):
         self.marker = marker
+        self.score = 0
 
     @property
     def marker(self):
@@ -100,11 +101,17 @@ class Player:
 class Human(Player):
     def __init__(self):
         super().__init__(Square.HUMAN_MARKER)
+        
+    def __str__(self):
+        return "You"
 
 
 class Computer(Player):
     def __init__(self):
         super().__init__(Square.COMPUTER_MARKER)
+        
+    def __str__(self):
+        return "Computer"
 
 
 class TTTGame:
@@ -118,6 +125,8 @@ class TTTGame:
         (1, 5, 9),  # diagonal: top-left to bottom-right
         (3, 5, 7),  # diagonal: top-right to bottom-left
     )
+
+    MATCH_WINS = 3
 
     @staticmethod
     def join_or(lst, delimiter=', ', conjunction='or'):
@@ -138,18 +147,37 @@ class TTTGame:
 
     def play(self):
         clear_screen()
+        self.display_scores()
         self.display_welcome_message()
         self.board.display()
+        self.play_match()
+        self.display_goodbye_message()
 
-        while True:
+    def play_match(self):
+        while not self.match_winner():
             self.play_round()
+            if self.match_winner():
+                break
             if self.play_again():
                 self.board.reset()
-                self.board.display_with_clear()
+                self.display_scores()
+                self.board.display()
             else:
-                break
+                return
+        self.display_match_winner()
 
-        self.display_goodbye_message()
+    def match_winner(self):
+        if self.human.score >= self.MATCH_WINS:
+            return self.human
+        if self.computer.score >= self.MATCH_WINS:
+            return self.computer
+        
+        return None
+    
+    def display_match_winner(self):
+        print(f"\nYou won {self.human.score}.")
+        print(f"Computer won {self.computer.score}.")
+        print(f"{self.match_winner()} wins the match.")
 
     def play_round(self):
         while True:
@@ -160,10 +188,11 @@ class TTTGame:
             self.computer_moves()
             if self.is_game_over():
                 break
+            self.display_scores()
+            self.board.display()
 
-            self.board.display_with_clear()
-
-        self.board.display_with_clear()
+        self.display_scores()
+        self.board.display()
         self.display_results()
 
     def play_again(self):
@@ -173,7 +202,7 @@ class TTTGame:
                 print("Please choose y or n.")
                 continue
             break
-        
+
         return again == 'y'
 
     def display_welcome_message(self):
@@ -182,11 +211,20 @@ class TTTGame:
     def display_goodbye_message(self):
         print("Thanks for playing Tic Tac Toe! Goodbye!")
 
+    def display_scores(self):
+        clear_screen()
+        print("*" * 35)
+        print(f"Player: {self.human.score}    |    Computer: {self.computer.score}")
+        print(f'Win {TTTGame.MATCH_WINS} rounds to win the match!')
+        print("*" * 35)
+
     def display_results(self):
         if self.is_winner(self.human):
             print("You won! Congratulations!")
+            self.human.score += 1
         elif self.is_winner(self.computer):
             print("I won! I won! Take that, human!")
+            self.computer.score += 1
         else:
             print("A tie game. How boring.")
 
@@ -225,22 +263,22 @@ class TTTGame:
             choice = self.pick_center_square()
         if not choice:
             choice = self.pick_random_square()
-            
+
         self.board.mark_square_at(choice, self.computer.marker)
-        
+
     def defensive_computer_move(self):
         return self.find_crtical_square(self.human)
-    
+
     def offensive_computer_move(self):
         return self.find_crtical_square(self.computer)
-    
+
     def pick_center_square(self):
         return 5 if self.board.squares[5].is_unused() else None
-    
+
     def pick_random_square(self):
         valid_choices = self.board.unused_squares()
         return random.choice(valid_choices)
-    
+
     def find_crtical_square(self, player):
         for row in TTTGame.POSSIBLE_WINNING_ROWS:
             key = self.critical_square(row, player)
@@ -256,7 +294,7 @@ class TTTGame:
                     return key
 
         return None
-    
+
     def is_game_over(self):
         return self.board.is_full() or self.someone_won()
 
