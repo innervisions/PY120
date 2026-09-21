@@ -229,20 +229,10 @@ class TTTGame:
         self.board.mark_square_at(choice, self.computer.marker)
         
     def defensive_computer_move(self):
-        for row in TTTGame.POSSIBLE_WINNING_ROWS:
-            key = self.at_risk_square(row, self.human)
-            if key:
-                return key
-
-        return None
+        return self.find_crtical_square(self.human)
     
     def offensive_computer_move(self):
-        for row in TTTGame.POSSIBLE_WINNING_ROWS:
-            key = self.at_risk_square(row, self.computer)
-            if key:
-                return key
-
-        return None
+        return self.find_crtical_square(self.computer)
     
     def pick_center_square(self):
         return 5 if self.board.squares[5].is_unused() else None
@@ -250,8 +240,16 @@ class TTTGame:
     def pick_random_square(self):
         valid_choices = self.board.unused_squares()
         return random.choice(valid_choices)
+    
+    def find_crtical_square(self, player):
+        for row in TTTGame.POSSIBLE_WINNING_ROWS:
+            key = self.critical_square(row, player)
+            if key:
+                return key
 
-    def at_risk_square(self, row, player):
+        return None
+
+    def critical_square(self, row, player):
         if self.board.count_markers_for(player, row) == 2:
             for key in row:
                 if self.board.squares[key].is_unused():
