@@ -137,24 +137,18 @@ class TTTGame:
         self.computer = Computer()
 
     def play(self):
+        clear_screen()
         self.display_welcome_message()
         self.board.display()
 
         while True:
             self.play_round()
-            while True:
-                again = input("Would you like to play again? (y/n): ").lower()
-                if again not in ('y', 'n'):
-                    print("Please choose y or n.")
-                    continue
-                break
-            
-            if again =='y':
+            if self.play_again():
                 self.board.reset()
                 self.board.display_with_clear()
             else:
                 break
-            
+
         self.display_goodbye_message()
 
     def play_round(self):
@@ -171,6 +165,16 @@ class TTTGame:
 
         self.board.display_with_clear()
         self.display_results()
+
+    def play_again(self):
+        while True:
+            again = input("Would you like to play again? (y/n): ").lower()
+            if again not in ("y", "n"):
+                print("Please choose y or n.")
+                continue
+            break
+        
+        return again == 'y'
 
     def display_welcome_message(self):
         print("Welcome to Tic Tac Toe!")
