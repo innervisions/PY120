@@ -60,6 +60,26 @@ class Deck:
         card.hide()
         return card
 
+class Hand:
+    def __init__(self):
+        self.cards = []
+    
+    def add_card(self, card):
+        self.cards.append(card)
+    
+    def total(self):
+        total_points = sum(card.points for card in self.cards)
+        aces = sum(1 for card in self.cards if card.rank == "A")
+        while total_points > 21 and aces:
+            total_points -= 10
+            aces -= 1
+        return total_points
+    
+    def is_busted(self):
+        return self.total() > 21
+    
+    def display(self):
+        return ", ".join(f"{card.suit}{card.rank}" for card in self.cards)    
 
 class Player:
     def __init__(self):
