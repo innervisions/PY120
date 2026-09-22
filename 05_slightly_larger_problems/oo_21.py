@@ -4,29 +4,30 @@ class Card:
     SUITS = ("♤", "♧", "♡", "♢")
     RANKS = tuple([str(num) for num in range(2, 10)] + ["A", "J", "Q", "K"])
     def __init__(self, rank, suit):
-        self._rank = rank
-        self._suit = suit
-
+        self.rank = rank
+        self.suit = suit
+        self._hidden = False
+    
     @property
     def rank(self):
         return self._rank
-
+    
     @rank.setter
     def rank(self, value):
-        if value not in self.RANKS:
+        if value not in Card.RANKS:
             raise ValueError(f"Invalid rank: {value}")
         self._rank = value
-
+    
     @property
     def suit(self):
-        return self._suit
-
+        return self._suit   
+    
     @suit.setter
     def suit(self, value):
-        if value not in self.SUITS:
+        if value not in Card.SUITS:
             raise ValueError(f"Invalid suit: {value}")
         self._suit = value
-        
+    
     @property
     def points(self):
         if self.rank == "A":
@@ -35,30 +36,28 @@ class Card:
             return 10
         else:
             return int(self.rank)
+        
+    def hide(self):
+        self._hidden = True
+    
+    def reveal(self):
+        self._hidden = False
 
 
 class Deck:
     def __init__(self):
-        # STUB
-        # What attributes does a deck need? A collection of
-        #   52 cards?
-        # Some data structure, like a list or dictionary,
-        #   might be required.
-        pass
+        self.cards = [Card(rank, suit) for suit in Card.SUITS for rank in Card.RANKS]
+        self.shuffle()
+
+    def shuffle(self):
+        random.shuffle(self.cards)
 
     def deal(self):
-        # STUB
-        # Does the dealer or the deck deal the cards?
-        pass
+        return self.cards.pop()
 
 class Participant:
     def __init__(self):
-        # STUB
-        # What attributes does a participant require? Score?
-        #   Hand? Betting balance?
-        # What else goes here? all the redundant behaviors
-        #   from Player and Dealer?
-        pass
+        self.hand = []
 
 class Player(Participant):
     def __init__(self):
