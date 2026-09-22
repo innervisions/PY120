@@ -108,38 +108,7 @@ class Player:
 
 class Dealer:
     def __init__(self):
-        # STUB
-        # Very similar to a Player; do we need this?
-        pass
-
-    def hit(self):
-        # STUB
-        pass
-
-    def stay(self):
-        # STUB
-        pass
-
-    def is_busted(self):
-        # STUB
-        pass
-
-    def score(self):
-        # STUB
-        pass
-
-    def hide(self):
-        # STUB
-        pass
-
-    def reveal(self):
-        # STUB
-        pass
-
-    def deal(self):
-        # STUB
-        # Does the dealer or the deck deal?
-        pass
+        self.hand = Hand()
 
 class TwentyOneGame:
     TARGET_SCORE = 21
