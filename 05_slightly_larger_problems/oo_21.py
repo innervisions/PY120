@@ -137,7 +137,9 @@ class TwentyOneGame:
         while not self.is_game_over():
             self.play_round()
             self.show_results()
-            self.next_round_prompt()
+            if not self.play_again():
+                self.display_goodbye_message()
+                return
             clear_screen()
         self.display_game_over_message()
         self.display_goodbye_message()
@@ -212,8 +214,15 @@ class TwentyOneGame:
         if not self.player.hand.is_busted():
             self.dealer_turn()
             
-    def next_round_prompt(self):
-        input("Press Enter to continue to the next round...")
+    def play_again(self):
+        while True:
+            choice = input("Do you want to play again? (y/n): ").strip().lower()
+            if choice == "y":
+                return True
+            elif choice == "n":
+                return False
+            else:
+                print("Invalid choice. Please enter 'y' to play again or 'n' to quit.")
 
     def display_welcome_message(self):
         print("Welcome to Twenty-One!")
