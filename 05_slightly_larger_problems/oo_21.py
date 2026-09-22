@@ -1,9 +1,41 @@
+import random
+
 class Card:
-    def __init__(self):
-        # STUB
-        # What attributes does a card need? Rank? Suit?
-        #   Points?
-        pass
+    SUITS = ("♤", "♧", "♡", "♢")
+    RANKS = tuple([str(num) for num in range(2, 10)] + ["A", "J", "Q", "K"])
+    def __init__(self, rank, suit):
+        self._rank = rank
+        self._suit = suit
+
+    @property
+    def rank(self):
+        return self._rank
+
+    @rank.setter
+    def rank(self, value):
+        if value not in self.RANKS:
+            raise ValueError(f"Invalid rank: {value}")
+        self._rank = value
+
+    @property
+    def suit(self):
+        return self._suit
+
+    @suit.setter
+    def suit(self, value):
+        if value not in self.SUITS:
+            raise ValueError(f"Invalid suit: {value}")
+        self._suit = value
+        
+    @property
+    def points(self):
+        if self.rank == "A":
+            return 11
+        elif self.rank in ["J", "Q", "K"]:
+            return 10
+        else:
+            return int(self.rank)
+
 
 class Deck:
     def __init__(self):
