@@ -85,27 +85,26 @@ class Hand:
         return ", ".join(f"{card.suit}{card.rank}" for card in self.cards)    
 
 class Player:
+    INITIAL_CASH = 5
+    WINNING_CASH = 2 * INITIAL_CASH
     def __init__(self):
-        # STUB
-        # What additional attributes might a player need?
-        # Score? Hand? Amount of money available?
-        pass
+       self.hand = Hand()
+       self.cash = self.INITIAL_CASH
 
-    def hit(self):
-        # STUB
-        pass
-
-    def stay(self):
-        # STUB
-        pass
-
-    def is_busted(self):
-        # STUB
-        pass
-
-    def score(self):
-        # STUB
-        pass
+    def win_bet(self):
+        self.cash += 1
+    
+    def lose_bet(self):
+        self.cash -= 1
+        
+    def is_broke(self):
+        return self.cash <= 0
+    
+    def is_rich(self):
+        return self.cash >= self.WINNING_CASH
+    
+    def show_winnings(self):
+        return f"You have ${self.cash}."
 
 class Dealer:
     def __init__(self):
