@@ -97,7 +97,6 @@ class Player:
     def marker(self, value):
         self._marker = value
 
-
 class Human(Player):
     def __init__(self):
         super().__init__(Square.HUMAN_MARKER)
@@ -109,7 +108,7 @@ class Human(Player):
 class Computer(Player):
     def __init__(self):
         super().__init__(Square.COMPUTER_MARKER)
-        
+
     def __str__(self):
         return "Computer"
 
@@ -173,9 +172,9 @@ class TTTGame:
             return self.human
         if self.computer.score >= self.MATCH_WINS:
             return self.computer
-        
+
         return None
-    
+
     def display_match_winner(self):
         print(f"\nYou won {self.human.score}.")
         print(f"Computer won {self.computer.score}.")
@@ -187,7 +186,7 @@ class TTTGame:
             self.player_moves(first_player)
             if self.is_game_over():
                 break
-            
+
             self.display_scores()
             self.board.display()
 
@@ -210,10 +209,10 @@ class TTTGame:
             break
 
         return again == 'y'
-    
+
     def swap_players(self, player):
         return self.human if player == self.computer else self.computer
-    
+
     def player_moves(self, player):
         if player == self.human:
             self.human_moves()
@@ -229,7 +228,8 @@ class TTTGame:
     def display_scores(self):
         clear_screen()
         print("*" * 35)
-        print(f"Player: {self.human.score}    |    Computer: {self.computer.score}")
+        print(f"Player: {self.human.score}    |    "
+              f"Computer: {self.computer.score}")
         print(f'Win {TTTGame.MATCH_WINS} rounds to win the match!')
         print("*" * 35)
 
