@@ -135,14 +135,8 @@ class TwentyOneGame:
     def start(self):
         self.display_welcome_message()
         while not self.is_game_over():
-            self.player.show_winnings()
-            self.deal_cards()
-            self.show_cards()
-            self.player_turn()
-            if not self.player.hand.is_busted():
-                self.dealer_turn()
-                if not self.dealer.hand.is_busted():
-                    self.show_results()
+            self.play_round()
+            self.show_results()
             self.next_round_prompt()
             clear_screen()
         self.display_game_over_message()
@@ -171,8 +165,6 @@ class TwentyOneGame:
                 print("Your cards:")
                 print(self.player.hand.display_with_total())
                 if self.player.hand.is_busted():
-                    print("You went bust.!")
-                    self.player.lose_bet()
                     break
             elif choice == "s":
                 break
@@ -189,24 +181,36 @@ class TwentyOneGame:
             print("Dealer's cards:")
             print(self.dealer.hand.display_with_total())
             if self.dealer.hand.is_busted():
-                print("Dealer busts! You win!")
-                self.player.win_bet()
                 return
         print("Dealer stays.")
 
     def show_results(self):
-        player_total = self.player.hand.total()
-        dealer_total = self.dealer.hand.total()
-        print(f"Your total: {player_total}")
-        print(f"Dealer's total: {dealer_total}")
-        if player_total > dealer_total:
-            print("You win!")
-            self.player.win_bet()
-        elif player_total < dealer_total:
-            print("Dealer wins!")
+        if self.player.hand.is_busted():
+            print("You went bust. Dealer wins.")
             self.player.lose_bet()
+        elif self.dealer.hand.is_busted():
+            print("Dealer busts! You win!")
+            self.player.win_bet()
         else:
-            print("It's a tie!")
+            player_total = self.player.hand.total()
+            dealer_total = self.dealer.hand.total()
+            print(f"Your total: {player_total}, Dealer's total: {dealer_total}")
+            if player_total > dealer_total:
+                print("You win!")
+                self.player.win_bet()
+            elif player_total < dealer_total:
+                print("Dealer wins.")
+                self.player.lose_bet()
+            else:
+                print("It's a push.")
+            
+    def play_round(self):
+        self.player.show_winnings()
+        self.deal_cards()
+        self.show_cards()
+        self.player_turn()
+        if not self.player.hand.is_busted():
+            self.dealer_turn()
             
     def next_round_prompt(self):
         input("Press Enter to continue to the next round...")
@@ -223,7 +227,7 @@ class TwentyOneGame:
     def display_game_over_message(self):
         self.player.show_winnings()
         if self.player.is_broke():
-            print("You are broke! Game over.")
+            print("You went broke! Game over.")
         elif self.player.is_rich():
             print("You have doubled your money! You win!")
 
