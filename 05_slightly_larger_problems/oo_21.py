@@ -63,6 +63,9 @@ class Deck:
 class Hand:
     def __init__(self):
         self.cards = []
+        
+    def reset(self):
+        self.cards = []
     
     def add_card(self, card):
         self.cards.append(card)
@@ -70,13 +73,13 @@ class Hand:
     def total(self):
         total_points = sum(card.points for card in self.cards)
         aces = sum(1 for card in self.cards if card.rank == "A")
-        while total_points > 21 and aces:
+        while total_points > TwentyOneGame.TARGET_SCORE and aces:
             total_points -= 10
             aces -= 1
         return total_points
     
     def is_busted(self):
-        return self.total() > 21
+        return self.total() > TwentyOneGame.TARGET_SCORE
     
     def display(self):
         return ", ".join(f"{card.suit}{card.rank}" for card in self.cards)    
@@ -140,6 +143,7 @@ class Dealer:
         pass
 
 class TwentyOneGame:
+    TARGET_SCORE = 21
     def __init__(self):
         # STUB
         # What attributes does the game need? A deck? Two
