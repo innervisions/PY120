@@ -54,12 +54,14 @@ class Deck:
 
     def deal(self):
         return self.cards.pop()
+    
+    def deal_face_down(self):
+        card = self.deal()
+        card.hide()
+        return card
 
-class Participant:
-    def __init__(self):
-        self.hand = []
 
-class Player(Participant):
+class Player:
     def __init__(self):
         # STUB
         # What additional attributes might a player need?
@@ -82,7 +84,7 @@ class Player(Participant):
         # STUB
         pass
 
-class Dealer(Participant):
+class Dealer:
     def __init__(self):
         # STUB
         # Very similar to a Player; do we need this?
